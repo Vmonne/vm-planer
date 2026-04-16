@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de Bord Éditorial — Victorine Monné</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0D0D0D;
+    --paper: #F5F0E8;
+    --cream: #EDE8DC;
+    --accent: #C4502A;
+    --accent2: #2A6B4F;
+    --gold: #C9A84C;
+    --muted: #7A7268;
+    --border: #D4CCBC;
+
+    --vm: #C4502A;
+    --likoam: #2A6B4F;
+    --libre: #7C3AED;
+    --djely: #1E5A8A;
+
+    --linkedin: #0A66C2;
+    --blog: #C4502A;
+    --youtube: #FF0000;
+    --social: #E1306C;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--accent);
+  }
+
+  .header-left h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+  }
+
+  .header-left span {
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .header-date {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  /* LAYOUT */
+  .main {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: calc(100vh - 70px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--cream);
+    border-right: 1px solid var(--border);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 8px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    text-align: left;
+    transition: all 0.15s;
+    width: 100%;
+  }
+
+  .nav-btn:hover { background: var(--border); }
+  .nav-btn.active { background: var(--ink); color: white; }
+
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* MAIN CONTENT */
+  .content {
+    padding: 28px 32px;
+    overflow-y: auto;
+  }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* CARDS */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+  }
+  .card-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .card-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .card-meta {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 10px;
+  }
+  .tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-weight: 500;
+    border: 1px solid;
+  }
+
+  /* STATUS BADGES */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 100px;
+  }
+  .badge-idea { background: #FEF9C3; color: #92400E; }
+  .badge-draft { background: #DBEAFE; color: #1E40AF; }
+  .badge-ready { background: #D1FAE5; color: #065F46; }
+  .badge-published { background: #F3E8FF; color: #6B21A8; }
+
+  /* GENERATE SECTION */
+  .generate-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .generate-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .form-group label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  select, input, textarea {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+  select:focus, input:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: white;
+  }
+  .btn-primary:hover { background: #333; }
+  .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink);
+  }
+  .btn-outline:hover { background: var(--cream); }
+  .btn-accent {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-accent:hover { background: #a8401f; }
+
+  /* RESULT BOX */
+  .result-box {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+    position: relative;
+  }
+  .result-box pre {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .result-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  /* LOADING */
+  .loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* PLANNER TABLE */
+  .planner-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .planner-table th {
+    background: var(--ink);
+    color: white;
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .planner-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .planner-table tr:last-child td { border-bottom: none; }
+  .planner-table tr:hover td { background: var(--cream); }
+
+  .channel-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* PROJECT COLOR DOT */
+  .vm-dot { background: var(--vm); }
+  .likoam-dot { background: var(--likoam); }
+  .libre-dot { background: var(--libre); }
+  .djely-dot { background: var(--djely); }
+
+  .vm-tag { color: var(--vm); border-color: var(--vm); background: #FDF0EC; }
+  .likoam-tag { color: var(--likoam); border-color: var(--likoam); background: #EAF5EF; }
+  .libre-tag { color: var(--libre); border-color: var(--libre); background: #F3E8FF; }
+  .djely-tag { color: var(--djely); border-color: var(--djely); background: #EBF3FC; }
+
+  /* STAT CARDS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 24px 0;
+  }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+  }
+  .empty-icon { font-size: 36px; margin-bottom: 10px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .main { grid-template-columns: 1fr; }
+    .sidebar { flex-direction: row; flex-wrap: wrap; padding: 12px; }
+    .form-row { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .highlight-bar {
+    height: 4px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div><span>TABLEAU DE BORD ÉDITORIAL</span></div>
+    <h1>Victorine Monné</h1>
+  </div>
+  <div class="header-date" id="headerDate"></div>
+</header>
+
+<div class="main">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-label">Navigation</div>
+    <button class="nav-btn active" onclick="showView('accueil', this)">
+      <span>📊</span> Vue d'ensemble
+    </button>
+    <button class="nav-btn" onclick="showView('generer', this)">
+      <span>✨</span> Générer du contenu
+    </button>
+    <button class="nav-btn" onclick="showView('planifier', this)">
+      <span>📅</span> Planificateur
+    </button>
+
+    <div class="sidebar-label" style="margin-top:16px">Projets</div>
+    <button class="nav-btn" onclick="showView('vm', this)">
+      <span class="nav-dot vm-dot"></span> Victorine Monné
+    </button>
+    <button class="nav-btn" onclick="showView('likoam', this)">
+      <span class="nav-dot likoam-dot"></span> LIKOAM
+    </button>
+    <button class="nav-btn" onclick="showView('libre', this)">
+      <span class="nav-dot libre-dot"></span> Libre Outils
+    </button>
+    <button class="nav-btn" onclick="showView('djely', this)">
+      <span class="nav-dot djely-dot"></span> Djelycom
+    </button>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- VUE D'ENSEMBLE -->
+    <div id="view-accueil" class="view active">
+      <div class="section-title">Vue d'ensemble</div>
+      <div class="section-sub">Ton activité éditoriale sur tous les projets</div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--accent)">4</div>
+          <div class="stat-label">Projets actifs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--likoam)">4</div>
+          <div class="stat-label">Canaux</div>
+        </div>
+        <div class="stat-card" id="stat-idees">
+          <div class="stat-num" style="color:var(--gold)">0</div>
+          <div class="stat-label">Idées en attente</div>
+        </div>
+        <div class="stat-card" id="stat-prets">
+          <div class="stat-num" style="color:var(--libre)">0</div>
+          <div class="stat-label">Contenus prêts</div>
+        </div>
+      </div>
+
+      <div class="generate-box">
+        <h3>⚡ Génération rapide</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Projet</label>
+            <select id="quick-project">
+              <option value="vm">Victorine Monné</option>
+              <option value="likoam">LIKOAM</option>
+              <option value="libre">Libre Outils</option>
+              <option value="djely">Djelycom</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Canal</label>
+            <select id="quick-channel">
+              <option value="linkedin">LinkedIn</option>
+              <option value="blog">Article de blog</option>
+              <option value="youtube">Script YouTube</option>
+              <option value="social">Facebook / Instagram</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Sujet ou angle</label>
+          <textarea id="quick-topic" placeholder="Ex : Pourquoi les archives sont importantes en Afrique..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="generateContent('quick')" id="btn-quick">
+          <span>✨</span> Générer avec IA
+        </button>
+        <div id="result-quick"></div>
+      </div>
+
+      <div class="section-title" style="font-size:18px; margin-bottom:12px">Prochaines publications</div>
+      <div id="overview-planned">
+        <div class="empty">
+          <div class="empty-icon">📅</div>
+          <div>Aucune publication planifiée.<br>Va dans <strong>Planificateur</strong> pour en ajouter.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GÉNÉRER -->
+    <div id="view-generer" class="view">
+      <div class="section-title">Générer du contenu</div>
+      <div class="section-sub">Crée des contenus adaptés à chaque projet et canal</div>
+
+      <div class="generate-box">
+        <h3>✍️ Paramètres de génération</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Projet</label>
+            <select id="gen-project">
+              <option value="vm">Victorine Monné (perso)</option>
+              <option value="likoam">LIKOAM</option>
+              <option value="libre">Libre Outils</option>
+              <option value="djely">Djelycom</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Canal de publication</label>
+            <select id="gen-channel">
+              <option value="linkedin">LinkedIn</option>
+              <option value="blog">Article de blog</option>
+              <option value="youtube">Script YouTube</option>
+              <option value="social">Facebook / Instagram</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ton</label>
+            <select id="gen-tone">
+              <option value="expert">Expert & inspirant</option>
+              <option value="storytelling">Storytelling personnel</option>
+              <option value="pedagogique">Pédagogique</option>
+              <option value="engagé">Engagé & militant</option>
+              <option value="concis">Court & percutant</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Langue</label>
+            <select id="gen-lang">
+              <option value="français">Français</option>
+              <option value="english">Anglais</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Sujet / angle / idée principale</label>
+          <textarea id="gen-topic" rows="3" placeholder="Décris ce que tu veux dire. Ex : LIKOAM vient de terminer sa phase de test avec 4 archivistes du réseau SIA..."></textarea>
+        </div>
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Contexte additionnel (optionnel)</label>
+          <textarea id="gen-context" rows="2" placeholder="Chiffres, anecdotes, personnes mentionnées, contraintes..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="generateContent('full')" id="btn-gen">
+          <span>✨</span> Générer avec IA
+        </button>
+        <div id="result-gen"></div>
+      </div>
+    </div>
+
+    <!-- PLANIFICATEUR -->
+    <div id="view-planifier" class="view">
+      <div class="section-title">Planificateur</div>
+      <div class="section-sub">Organise tes publications à venir</div>
+
+      <div class="generate-box">
+        <h3>➕ Ajouter une publication</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Projet</label>
+            <select id="plan-project">
+              <option value="vm">Victorine Monné</option>
+              <option value="likoam">LIKOAM</option>
+              <option value="libre">Libre Outils</option>
+              <option value="djely">Djelycom</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Canal</label>
+            <select id="plan-channel">
+              <option value="linkedin">LinkedIn</option>
+              <option value="blog">Blog</option>
+              <option value="youtube">YouTube</option>
+              <option value="social">Facebook/Instagram</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Titre / Sujet</label>
+            <input type="text" id="plan-title" placeholder="Ex : Lancement officiel de LIKOAM v1.0">
+          </div>
+          <div class="form-group">
+            <label>Date prévue</label>
+            <input type="date" id="plan-date">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Statut</label>
+            <select id="plan-status">
+              <option value="idea">💡 Idée</option>
+              <option value="draft">📝 Brouillon</option>
+              <option value="ready">✅ Prêt</option>
+              <option value="published">🚀 Publié</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-accent" onclick="addToPlanner()">
+          ➕ Ajouter au planning
+        </button>
+      </div>
+
+      <table class="planner-table" id="planner-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Projet</th>
+            <th>Canal</th>
+            <th>Sujet</th>
+            <th>Statut</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="planner-body">
+          <tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted)">Aucune publication planifiée</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PROJET: VICTORINE MONNÉ -->
+    <div id="view-vm" class="view">
+      <div class="highlight-bar" style="background:var(--vm); width:60px"></div>
+      <div class="section-title">Victorine Monné</div>
+      <div class="section-sub">Profil personnel — archiviste qui code</div>
+      <div class="cards-grid" id="ideas-vm"></div>
+      <button class="btn btn-outline" onclick="showQuickGen('vm')">+ Nouvelle idée de contenu</button>
+      <div id="result-vm-quick" style="margin-top:16px"></div>
+    </div>
+
+    <!-- PROJET: LIKOAM -->
+    <div id="view-likoam" class="view">
+      <div class="highlight-bar" style="background:var(--likoam); width:60px"></div>
+      <div class="section-title">LIKOAM</div>
+      <div class="section-sub">Logiciel de gestion d'archives — Google Workspace</div>
+      <div class="cards-grid" id="ideas-likoam"></div>
+      <button class="btn btn-outline" onclick="showQuickGen('likoam')">+ Nouvelle idée de contenu</button>
+      <div id="result-likoam-quick" style="margin-top:16px"></div>
+    </div>
+
+    <!-- PROJET: LIBRE OUTILS -->
+    <div id="view-libre" class="view">
+      <div class="highlight-bar" style="background:var(--libre); width:60px"></div>
+      <div class="section-title">Libre Outils</div>
+      <div class="section-sub">Suite d'outils HTML offline — solutions accessibles</div>
+      <div class="cards-grid" id="ideas-libre"></div>
+      <button class="btn btn-outline" onclick="showQuickGen('libre')">+ Nouvelle idée de contenu</button>
+      <div id="result-libre-quick" style="margin-top:16px"></div>
+    </div>
+
+    <!-- PROJET: DJELYCOM -->
+    <div id="view-djely" class="view">
+      <div class="highlight-bar" style="background:var(--djely); width:60px"></div>
+      <div class="section-title">Djelycom</div>
+      <div class="section-sub">Plateforme de savoirs pour bibliothèques communautaires</div>
+      <div class="cards-grid" id="ideas-djely"></div>
+      <button class="btn btn-outline" onclick="showQuickGen('djely')">+ Nouvelle idée de contenu</button>
+      <div id="result-djely-quick" style="margin-top:16px"></div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// === DATA ===
+const PROJECTS = {
+  vm: { name: "Victorine Monné", color: "#C4502A", desc: "Archiviste et développeuse de solutions pour institutions africaines. Créatrice de LIKOAM, Libre Outils, Djelycom. Voix francophone sur les archives en Afrique." },
+  likoam: { name: "LIKOAM", color: "#2A6B4F", desc: "Application web de gestion d'archives courantes et intermédiaires, construite sur Google Workspace (Apps Script, Sheets, Drive). Solution accessible pour institutions francophones africaines." },
+  libre: { name: "Libre Outils", color: "#7C3AED", desc: "Suite d'outils HTML standalone offline : TontineManager, BiblioManager, DocManager, PMEManager, ContentForge, Mon Budget Familial. Palette violet/cyan, entièrement fonctionnels sans internet." },
+  djely: { name: "Djelycom", color: "#1E5A8A", desc: "Plateforme de savoirs hors-ligne pour bibliothèques communautaires sous-desservies en Afrique. Raspberry Pi 5, Python/Flask, SQLite, OCR Tesseract, Ollama RAG. Site pilote : DRCF N'Zi, Côte d'Ivoire." }
+};
+
+const CHANNELS = {
+  linkedin: { name: "LinkedIn", icon: "💼" },
+  blog: { name: "Blog", icon: "✍️" },
+  youtube: { name: "YouTube", icon: "▶️" },
+  social: { name: "Facebook/Instagram", icon: "📱" }
+};
+
+let plannerItems = JSON.parse(localStorage.getItem('vm_planner') || '[]');
+let contentIdeas = JSON.parse(localStorage.getItem('vm_ideas') || '{}');
+
+// === NAVIGATION ===
+function showView(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  renderPlanner();
+  updateStats();
+}
+
+// === DATE ===
+function formatDate(d) {
+  return new Date(d).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+}
+document.getElementById('headerDate').innerHTML = formatDate(new Date());
+
+// === AI GENERATION ===
+async function generateContent(mode) {
+  let project, channel, topic, context = '', tone = 'expert', lang = 'français';
+
+  if (mode === 'quick') {
+    project = document.getElementById('quick-project').value;
+    channel = document.getElementById('quick-channel').value;
+    topic = document.getElementById('quick-topic').value.trim();
+  } else {
+    project = document.getElementById('gen-project').value;
+    channel = document.getElementById('gen-channel').value;
+    topic = document.getElementById('gen-topic').value.trim();
+    context = document.getElementById('gen-context').value.trim();
+    tone = document.getElementById('gen-tone').value;
+    lang = document.getElementById('gen-lang').value;
+  }
+
+  if (!topic) { alert('Merci d\'entrer un sujet ou une idée.'); return; }
+
+  const resultId = mode === 'quick' ? 'result-quick' : 'result-gen';
+  const btnId = mode === 'quick' ? 'btn-quick' : 'btn-gen';
+  const resultEl = document.getElementById(resultId);
+  const btnEl = document.getElementById(btnId);
+
+  btnEl.disabled = true;
+  resultEl.innerHTML = `<div class="loading"><div class="spinner"></div> Génération en cours...</div>`;
+
+  const proj = PROJECTS[project];
+  const chan = CHANNELS[channel];
+
+  const channelInstructions = {
+    linkedin: `Rédige un post LinkedIn percutant. Entre 150 et 300 mots. Commence par une accroche forte (pas "Je suis fier de..."). Utilise des sauts de ligne pour aérer. Termine par un appel à l'action ou une question. Pas de hashtags génériques, seulement 3-5 hashtags très pertinents à la fin.`,
+    blog: `Rédige un article de blog structuré. Entre 600 et 900 mots. Inclus : un titre accrocheur (H1), une introduction, 3-4 sections avec sous-titres (H2), et une conclusion avec call-to-action. Ton éditorial, pas académique.`,
+    youtube: `Rédige un script YouTube pour une vidéo de 5-8 minutes. Structure : accroche (30s), présentation du problème (1min), développement en 3 points (4min), conclusion + CTA (1min). Indique les transitions et moments visuels en [crochets].`,
+    social: `Rédige un post Facebook/Instagram. Court (80-150 mots), émotionnel, visuel dans le texte. Commence par une question ou un fait surprenant. 5-8 hashtags pertinents à la fin.`
+  };
+
+  const toneGuide = {
+    expert: "Expert et inspirant, comme une leader d'opinion reconnue.",
+    storytelling: "Storytelling personnel, première personne, ton chaleureux et humain.",
+    pedagogique: "Pédagogique et accessible, comme si tu expliquais à un collègue.",
+    engagé: "Engagé et militant pour les archives africaines et la souveraineté documentaire.",
+    concis: "Court, direct, percutant. Chaque mot compte."
+  };
+
+  const prompt = `Tu es l'assistante éditoriale de Victorine Monné, archiviste conservatrice au Ministère de la Culture en Côte d'Ivoire, créatrice de ${proj.name}.
+
+Contexte du projet : ${proj.desc}
+
+MISSION : ${channelInstructions[channel]}
+
+SUJET : ${topic}
+${context ? `CONTEXTE ADDITIONNEL : ${context}` : ''}
+TON : ${toneGuide[tone]}
+LANGUE : ${lang}
+
+Important : Tu écris EN NOM de Victorine. Voix authentique, ancrée dans la réalité africaine et archivistique. Évite le jargon tech pompeux. Sois concrète et impactante.`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content?.map(b => b.text || '').join('') || 'Erreur de génération.';
+
+    resultEl.innerHTML = `
+      <div class="result-box">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="display:flex;gap:8px;align-items:center">
+            <span style="font-size:12px;font-weight:600;color:var(--muted)">${proj.name} · ${chan.icon} ${chan.name}</span>
+          </div>
+          <button class="btn btn-outline" style="font-size:11px;padding:5px 10px" onclick="copyText(this)">📋 Copier</button>
+        </div>
+        <pre id="gen-text-${mode}">${text}</pre>
+        <div class="result-actions">
+          <button class="btn btn-primary" onclick="saveIdea('${project}', '${channel}', document.getElementById('gen-text-${mode}').textContent, '${topic.replace(/'/g,"\\'")}')">💾 Sauvegarder</button>
+          <button class="btn btn-outline" onclick="generateContent('${mode}')">🔄 Régénérer</button>
+        </div>
+      </div>`;
+  } catch(e) {
+    resultEl.innerHTML = `<div class="result-box" style="color:red">Erreur : ${e.message}</div>`;
+  }
+
+  btnEl.disabled = false;
+}
+
+function copyText(btn) {
+  const pre = btn.closest('.result-box').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent);
+  btn.textContent = '✅ Copié !';
+  setTimeout(() => btn.textContent = '📋 Copier', 2000);
+}
+
+// === IDEAS STORAGE ===
+function saveIdea(project, channel, text, title) {
+  if (!contentIdeas[project]) contentIdeas[project] = [];
+  contentIdeas[project].push({
+    id: Date.now(),
+    channel,
+    title: title || 'Sans titre',
+    text,
+    status: 'ready',
+    date: new Date().toISOString().split('T')[0]
+  });
+  localStorage.setItem('vm_ideas', JSON.stringify(contentIdeas));
+  renderIdeas(project);
+  updateStats();
+  alert('✅ Contenu sauvegardé !');
+}
+
+function renderIdeas(project) {
+  const el = document.getElementById('ideas-' + project);
+  if (!el) return;
+  const ideas = contentIdeas[project] || [];
+  if (!ideas.length) {
+    el.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">✏️</div><div>Aucun contenu encore. Génère ton premier !</div></div>`;
+    return;
+  }
+  el.innerHTML = ideas.map(idea => `
+    <div class="card" onclick="openIdea('${project}', ${idea.id})">
+      <div class="card-accent" style="background:${PROJECTS[project].color}"></div>
+      <div class="card-label">${CHANNELS[idea.channel]?.icon || ''} ${CHANNELS[idea.channel]?.name || idea.channel}</div>
+      <div class="card-title">${idea.title}</div>
+      <div class="card-meta">${idea.date}</div>
+      <div class="card-tags">
+        <span class="tag ${project}-tag">${PROJECTS[project].name}</span>
+        <span class="badge badge-ready">✅ Prêt</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openIdea(project, id) {
+  const idea = (contentIdeas[project] || []).find(i => i.id === id);
+  if (!idea) return;
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px';
+  modal.innerHTML = `
+    <div style="background:white;border-radius:16px;padding:28px;max-width:640px;width:100%;max-height:80vh;overflow-y:auto">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px">${CHANNELS[idea.channel]?.name}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700">${idea.title}</div>
+        </div>
+        <button onclick="this.closest('div[style*=fixed]').remove()" style="background:none;border:none;font-size:20px;cursor:pointer">✕</button>
+      </div>
+      <pre style="font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.7;white-space:pre-wrap;background:var(--cream);padding:16px;border-radius:8px">${idea.text}</pre>
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button class="btn btn-primary" onclick="navigator.clipboard.writeText('${idea.text.replace(/'/g,"\\'")}');this.textContent='✅ Copié!'">📋 Copier</button>
+        <button class="btn btn-outline" onclick="deleteIdea('${project}',${id});this.closest('div[style*=fixed]').remove()">🗑️ Supprimer</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+}
+
+function deleteIdea(project, id) {
+  contentIdeas[project] = (contentIdeas[project] || []).filter(i => i.id !== id);
+  localStorage.setItem('vm_ideas', JSON.stringify(contentIdeas));
+  renderIdeas(project);
+  updateStats();
+}
+
+// === QUICK GEN PER PROJECT ===
+function showQuickGen(project) {
+  const container = document.getElementById('result-' + project + '-quick');
+  container.innerHTML = `
+    <div class="generate-box" style="margin-top:0">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Canal</label>
+          <select id="qg-channel-${project}">
+            <option value="linkedin">LinkedIn</option>
+            <option value="blog">Blog</option>
+            <option value="youtube">YouTube</option>
+            <option value="social">Facebook/Instagram</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ton</label>
+          <select id="qg-tone-${project}">
+            <option value="expert">Expert</option>
+            <option value="storytelling">Storytelling</option>
+            <option value="pedagogique">Pédagogique</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:12px">
+        <label>Sujet</label>
+        <textarea id="qg-topic-${project}" rows="2" placeholder="Ton idée..."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="generateFromProject('${project}')">✨ Générer</button>
+      <div id="qg-result-${project}" style="margin-top:12px"></div>
+    </div>`;
+}
+
+async function generateFromProject(project) {
+  const channel = document.getElementById('qg-channel-' + project).value;
+  const tone = document.getElementById('qg-tone-' + project).value;
+  const topic = document.getElementById('qg-topic-' + project).value.trim();
+  const resultEl = document.getElementById('qg-result-' + project);
+  if (!topic) { alert('Entre un sujet.'); return; }
+
+  resultEl.innerHTML = `<div class="loading"><div class="spinner"></div> Génération...</div>`;
+
+  const proj = PROJECTS[project];
+  const channelInstructions = {
+    linkedin: "Post LinkedIn percutant, 150-300 mots, accroche forte, 3-5 hashtags.",
+    blog: "Article de blog 600-900 mots avec titre, intro, 3 sections, conclusion.",
+    youtube: "Script YouTube 5-8 min avec accroche, développement, CTA.",
+    social: "Post Facebook/Instagram court 80-150 mots, émotionnel, hashtags."
+  };
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: `Tu es l'assistante de Victorine Monné, archiviste en Côte d'Ivoire, créatrice de ${proj.name}. ${proj.desc}\n\n${channelInstructions[channel]}\n\nSujet : ${topic}\nTon : ${tone}\n\nÉcris au nom de Victorine en français.` }]
+      })
+    });
+    const data = await response.json();
+    const text = data.content?.map(b => b.text || '').join('') || 'Erreur.';
+    resultEl.innerHTML = `
+      <div class="result-box">
+        <pre id="qg-text-${project}-${Date.now()}">${text}</pre>
+        <div class="result-actions">
+          <button class="btn btn-primary" onclick="saveIdea('${project}','${channel}',this.closest('.result-box').querySelector('pre').textContent,'${topic.replace(/'/g,"\\'")}')">💾 Sauvegarder</button>
+          <button class="btn btn-outline" onclick="navigator.clipboard.writeText(this.closest('.result-box').querySelector('pre').textContent);this.textContent='✅ Copié!'">📋 Copier</button>
+        </div>
+      </div>`;
+  } catch(e) {
+    resultEl.innerHTML = `<div style="color:red">Erreur: ${e.message}</div>`;
+  }
+}
+
+// === PLANNER ===
+function addToPlanner() {
+  const project = document.getElementById('plan-project').value;
+  const channel = document.getElementById('plan-channel').value;
+  const title = document.getElementById('plan-title').value.trim();
+  const date = document.getElementById('plan-date').value;
+  const status = document.getElementById('plan-status').value;
+
+  if (!title || !date) { alert('Remplis le titre et la date.'); return; }
+
+  plannerItems.push({ id: Date.now(), project, channel, title, date, status });
+  plannerItems.sort((a, b) => a.date.localeCompare(b.date));
+  localStorage.setItem('vm_planner', JSON.stringify(plannerItems));
+  renderPlanner();
+  updateStats();
+  document.getElementById('plan-title').value = '';
+  document.getElementById('plan-date').value = '';
+}
+
+function renderPlanner() {
+  const tbody = document.getElementById('planner-body');
+  if (!tbody) return;
+  if (!plannerItems.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted)">Aucune publication planifiée</td></tr>';
+    return;
+  }
+  const statusMap = {
+    idea: '<span class="badge badge-idea">💡 Idée</span>',
+    draft: '<span class="badge badge-draft">📝 Brouillon</span>',
+    ready: '<span class="badge badge-ready">✅ Prêt</span>',
+    published: '<span class="badge badge-published">🚀 Publié</span>'
+  };
+  tbody.innerHTML = plannerItems.map(item => `
+    <tr>
+      <td>${new Date(item.date).toLocaleDateString('fr-FR', {day:'2-digit',month:'short'})}</td>
+      <td><span class="tag ${item.project}-tag">${PROJECTS[item.project]?.name}</span></td>
+      <td><span class="channel-icon">${CHANNELS[item.channel]?.icon} ${CHANNELS[item.channel]?.name}</span></td>
+      <td style="font-weight:500">${item.title}</td>
+      <td>${statusMap[item.status] || item.status}</td>
+      <td><button onclick="deletePlan(${item.id})" style="background:none;border:none;cursor:pointer;color:var(--muted)" title="Supprimer">✕</button></td>
+    </tr>
+  `).join('');
+
+  // Overview
+  const overviewEl = document.getElementById('overview-planned');
+  if (overviewEl) {
+    const upcoming = plannerItems.filter(i => i.date >= new Date().toISOString().split('T')[0]).slice(0, 4);
+    if (!upcoming.length) {
+      overviewEl.innerHTML = '<div class="empty"><div class="empty-icon">📅</div><div>Aucune publication planifiée.</div></div>';
+    } else {
+      const statusMap2 = { idea: 'badge-idea', draft: 'badge-draft', ready: 'badge-ready', published: 'badge-published' };
+      overviewEl.innerHTML = `<div class="cards-grid">${upcoming.map(item => `
+        <div class="card">
+          <div class="card-accent" style="background:${PROJECTS[item.project]?.color}"></div>
+          <div class="card-label">${CHANNELS[item.channel]?.icon} ${CHANNELS[item.channel]?.name}</div>
+          <div class="card-title">${item.title}</div>
+          <div class="card-meta">${new Date(item.date).toLocaleDateString('fr-FR',{day:'numeric',month:'long'})}</div>
+          <div class="card-tags">
+            <span class="tag ${item.project}-tag">${PROJECTS[item.project]?.name}</span>
+          </div>
+        </div>`).join('')}</div>`;
+    }
+  }
+}
+
+function deletePlan(id) {
+  plannerItems = plannerItems.filter(i => i.id !== id);
+  localStorage.setItem('vm_planner', JSON.stringify(plannerItems));
+  renderPlanner();
+  updateStats();
+}
+
+// === STATS ===
+function updateStats() {
+  const allIdeas = Object.values(contentIdeas).flat();
+  const ideaCount = allIdeas.filter(i => i.status === 'idea').length;
+  const readyCount = allIdeas.filter(i => i.status === 'ready').length;
+  const s1 = document.getElementById('stat-idees');
+  const s2 = document.getElementById('stat-prets');
+  if (s1) s1.querySelector('.stat-num').textContent = plannerItems.length;
+  if (s2) s2.querySelector('.stat-num').textContent = readyCount + allIdeas.filter(i => i.status !== 'idea').length;
+}
+
+// === INIT ===
+renderPlanner();
+updateStats();
+['vm','likoam','libre','djely'].forEach(renderIdeas);
+</script>
+</body>
+</html>
